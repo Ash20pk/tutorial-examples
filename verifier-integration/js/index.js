@@ -109,5 +109,5 @@ async function callback(req, res) {
   return res
     .status(200)
     .set("Content-Type", "application/json")
-    .send(authResponse);
+    .send("Verified");
 }
