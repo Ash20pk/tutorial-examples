@@ -29,7 +29,7 @@ const requestMap = new Map();
 // GetQR returns auth request
 async function getAuthRequest(req, res) {
   // Audience is verifier id
-  const hostUrl = "<NGROK_URL>";
+  const hostUrl = "http://localhost:8080";
   const sessionId = 1;
   const callbackURL = "/api/callback";
   const audience =
@@ -47,12 +47,12 @@ async function getAuthRequest(req, res) {
     circuitId: "credentialAtomicQuerySigV2",
     query: {
       allowedIssuers: ["*"],
-      type: "KYCAgeCredential",
+      type: "UniquenessCredential",
       context:
-        "https://raw.githubusercontent.com/iden3/claim-schema-vocab/main/schemas/json-ld/kyc-v3.json-ld",
+        'https://raw.githubusercontent.com/Ash20pk/privado-poc/refs/heads/main/public/schemas/json-ld/UniquenessCredential.jsonld',
       credentialSubject: {
-        birthday: {
-          $lt: 20000101,
+        confidenceScore: {
+          $gt: 80 // Prove that confidence score is >= 80
         },
       },
     },
@@ -79,7 +79,7 @@ async function callback(req, res) {
 
   const resolvers = {
     ["polygon:amoy"]: new resolver.EthStateResolver(
-    "<Polygon_Amoy_RPC_URL>",
+    "https://rpc-amoy.polygon.technology",
     "0x1a4cC30f2aA0377b0c3bc9848766D90cb4404124"
   ),
   ["privado:main"]: new resolver.EthStateResolver(
