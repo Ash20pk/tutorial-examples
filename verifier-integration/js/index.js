@@ -4,10 +4,16 @@ const { auth, resolver, protocol } = require("@iden3/js-iden3-auth");
 const getRawBody = require("raw-body");
 const cors = require('cors');
 const app = express();
-const port = 8080;
+const port = 3001;
 
 app.use(express.static("../static"));
 app.use(cors());
+
+// Middleware to add ngrok-skip-browser-warning header to all responses
+app.use((req, res, next) => {
+  res.setHeader('ngrok-skip-browser-warning', '1');
+  next();
+});
 
 app.get("/api/sign-in", (req, res) => {
   console.log("get Auth Request");
@@ -20,7 +26,7 @@ app.post("/api/callback", (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log("server running on port 8080");
+  console.log("server running on port 3001");
 });
 
 // Create a map to store the auth requests and their session IDs
@@ -29,7 +35,7 @@ const requestMap = new Map();
 // GetQR returns auth request
 async function getAuthRequest(req, res) {
   // Audience is verifier id
-  const hostUrl = "http://localhost:8080";
+  const hostUrl = "http://localhost:3001";
   const sessionId = 1;
   const callbackURL = "/api/callback";
   const audience =
