@@ -2,21 +2,12 @@ const path = require("path");
 const express = require("express");
 const { auth, resolver, protocol } = require("@iden3/js-iden3-auth");
 const getRawBody = require("raw-body");
-const cors = require('cors');
 const app = express();
 const port = 3001;
 
 app.use(express.static("../static"));
 
-// Enhanced CORS configuration
-app.use(cors({
-  origin: '*', // Allow all origins
-  methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'ngrok-skip-browser-warning'],
-  credentials: true,
-  preflightContinue: false,
-  optionsSuccessStatus: 204
-}));
+// Removed CORS middleware since Caddy is handling it
 
 app.get("/api/sign-in", (req, res) => {
   console.log("get Auth Request");
@@ -38,7 +29,7 @@ const requestMap = new Map();
 // GetQR returns auth request
 async function getAuthRequest(req, res) {
   // Audience is verifier id
-  const hostUrl = "http://localhost:3001";
+  const hostUrl = "https://talented-top-kite.ngrok-free.app/privado";
   const sessionId = 1;
   const callbackURL = "/api/callback";
   const audience =
