@@ -7,13 +7,16 @@ const app = express();
 const port = 3001;
 
 app.use(express.static("../static"));
-app.use(cors());
 
-// Middleware to add ngrok-skip-browser-warning header to all responses
-app.use((req, res, next) => {
-  res.setHeader('ngrok-skip-browser-warning', '1');
-  next();
-});
+// Enhanced CORS configuration
+app.use(cors({
+  origin: '*', // Allow all origins
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'ngrok-skip-browser-warning'],
+  credentials: true,
+  preflightContinue: false,
+  optionsSuccessStatus: 204
+}));
 
 app.get("/api/sign-in", (req, res) => {
   console.log("get Auth Request");
