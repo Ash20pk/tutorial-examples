@@ -59,11 +59,13 @@ async function getAuthRequest(req, res) {
   };
   const scope = request.body.scope ?? [];
   request.body.scope = [...scope, proofRequest];
-
   // Store auth request in map associated with session ID
   requestMap.set(`${sessionId}`, request);
 
-  return res.status(200).set("Content-Type", "application/json").send(request);
+  return res.status(200).set("Content-Type", "application/json").send({
+    request: request,
+    sessionId: sessionId
+  });
 }
 
 // Callback verifies the proof after sign-in callbacks
